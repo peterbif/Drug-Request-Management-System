@@ -17,6 +17,8 @@ class CreateDrugDetailsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('brand_name');
+            $table->string('alternative_name')->nullable();
+            $table->string('root')->nullable();
             $table->string('strength');
             $table->string('presentation');
             $table->integer('status_id');

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\DrugDetailImport;
 use App\Models\DrugDetail;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DrugDetailController extends Controller
 {
@@ -29,15 +31,21 @@ class DrugDetailController extends Controller
         if($name){
 
         $allDrugs = DrugDetail::with('status')->where('name', 'like',  '%'.$name. '%')
-                           ->orWhere('brand_name', 'like',  '%'.$name. '%')->get();
+                           ->orWhere('brand_name', 'like',  '%'.$name. '%')
+                           ->orWhere('alternative_name', 'like',  '%'.$name. '%')
+                           ->get();
 
 
          $allDrug2 = DrugDetail::with('status')->where('name', 'like',  '%'.$name. '%')
-         ->orWhere('brand_name', 'like',  '%'.$name. '%')->get();
+         ->orWhere('brand_name', 'like',  '%'.$name. '%')
+         ->orWhere('alternative_name', 'like',  '%'.$name. '%')
+         ->get();
 
 
          $totalDrugs = DrugDetail::with('status')->where('name', 'like',  '%'.$name. '%')
-         ->orWhere('brand_name', 'like',  '%'.$name. '%')->get()->count();
+         ->orWhere('brand_name', 'like',  '%'.$name. '%')
+         ->orWhere('alternative_name', 'like',  '%'.$name. '%')
+         ->get()->count();
 
         }else{
 
@@ -94,6 +102,29 @@ class DrugDetailController extends Controller
         //
     }
 
+    public function uploadFiles( Request $request){
+
+     return $request->all();
+
+    
+
+     return $file = $request->file('file')->getRealPath();
+
+    Excel::import(new DrugDetailImport ,  $file);
+    // $ext = $file->getClientOriginalExtension();
+    // $type = $this->getType($ext);
+    // $fileName = $request['name'] . '.' . $ext;
+
+    //     if (Storage::putFileAs('/storage/uploads', $file, fileName)) {
+    //     // Make sure you storage the location of the file somewhere. For example in your database
+    // }
+    
+    // Return a proper response
+    return response()->json([
+        'success' => true,
+    ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -106,11 +137,13 @@ class DrugDetailController extends Controller
 
      $all =  $request->validate([
 
-              'name' => 'required',
+             'name' => 'required',
+             'gen_id'=> 'required',
              'brand_name' => 'required',
-              'strength' => 'required', 
-              'presentation' => 'required',
-               'status_id' => 'required', 
+             'alternative_name' => 'required',
+             'strength' => 'required', 
+             'presentation' => 'required',
+             'status_id' => 'required', 
             
         ]);
 
@@ -118,6 +151,8 @@ class DrugDetailController extends Controller
        
 
          $all['user_id'] =  $user->id; 
+         $all['root'] =  $request->root; 
+
 
 
          $DrugDetail->create($all);
@@ -163,6 +198,8 @@ class DrugDetailController extends Controller
      */
     public function update(Request $request)
     {
+
+    //    return  $request->all();
         //
         $request->validate([
 
@@ -176,32 +213,46 @@ class DrugDetailController extends Controller
 
 
 
-
         $user = JWTAuth::parseToken()->authenticate();
        
        
-        if($DrugDetail->name){
+        if($request->name){
             $DrugDetail->name = $request->name;
            }
 
-           if($DrugDetail->brand_name){
+           if($request->gen_id){
+            $DrugDetail->gen_id = $request->gen_id;
+           }
+
+
+           
+
+           if($request->brand_name){
             $DrugDetail->brand_name = $request->brand_name;
            }
 
-           if($DrugDetail->strength){
+           if($request->strength){
             $DrugDetail->strength = $request->strength;
            }
 
+           if($request->alternative_name){
+            $DrugDetail->alternative_name = $request->alternative_name;
+           }
 
-           if($DrugDetail->presentation){
+           if($request->root){
+            $DrugDetail->root = $request->root;
+           }
+
+
+           
+
+           if($request->presentation){
             $DrugDetail->presentation = $request->presentation;
            }
 
-
-           if($DrugDetail->status_id){
+           if($request->status_id){
             $DrugDetail->status_id = $request->status_id;
            }
-
 
             $DrugDetail->user_id = $user->id;
            

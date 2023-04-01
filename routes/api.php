@@ -61,9 +61,9 @@ Route::get('/getAllStaffCategories','index');
 });
 
 
-//State
 
- Route::get('getStates', 'CustomerController@getStates');
+
+
 
 //staffcontroller
 Route::controller(StaffController::class)->group(function () {
@@ -90,14 +90,12 @@ Route::get('/search/staffCategory', 'StaffCategoryController@search');
 
 Route::get('/allStatuses', 'StatusController@index');
 
-
-
 Route::get('/search/drug', 'DrugDetailController@search');
 
 
 Route::get('/allDrugs', 'DrugDetailController@allDrugs');
 
-
+Route::post('/importFile', 'DrugDetailController@uploadFiles');
 
 
 
@@ -149,13 +147,13 @@ Route::get('/allDrugs', 'DrugDetailController@allDrugs');
     Route::post('/checkToken', 'AuthController@checkToken');
 
    
-    Route::get('/getallFabrics', 'FabricsMaterialController@getAllFabricss');
+    // Route::get('/getallFabrics', 'FabricsMaterialController@getAllFabricss');
 
-    Route::get('/getAllSales', 'SalesController@getAllSales');
+    // Route::get('/getAllSales', 'SalesController@getAllSales');
 
-    Route::post('/getAllAnniversaries', 'AnniversaryController@getAllAnniversaries');
+    // Route::post('/getAllAnniversaries', 'AnniversaryController@getAllAnniversaries');
 
-    Route::post('/getAllWeddings', 'AnniversaryController@getAllWeddings');
+    // Route::post('/getAllWeddings', 'AnniversaryController@getAllWeddings');
 
 
     
@@ -171,21 +169,20 @@ Route::get('/allDrugs', 'DrugDetailController@allDrugs');
 
     Route::get('/allStaffCategory', 'StaffCategoryController@allStaffCategory');
 
-    Route::apiResource('/customers', 'CustomerController');
 
-    Route::apiResource('/orders', 'OrderController');
-
+    // Route::apiResource('/orders', 'OrderController');
 
 
 
-    Route::apiResource('/fabrics', 'FabricsMaterialController');
 
-    Route::apiResource('/sales', 'SalesController');
+    // Route::apiResource('/fabrics', 'FabricsMaterialController');
+
+    // Route::apiResource('/sales', 'SalesController');
 
 
     Route::post('/logout', 'AuthController@logout');
 
-    Route::get('/todayDelivery', 'OrderController@todayDelivery');
+    // Route::get('/todayDelivery', 'OrderController@todayDelivery');
 
 
     
